@@ -1,5 +1,5 @@
-#ifndef _GRAPH_H
-#define _GRAPH_H
+#ifndef _GRAPH_H_
+#define _GRAPH_H_
 
 #include <stdlib.h>
 
@@ -30,9 +30,10 @@ typedef struct
     float weight;   //Peso da aresta
 } edge;
 
-const float NO_WEIGHT = -1.0; //Valor default para arestas invalidas (inexistentes/sem peso)
+#define NO_WEIGHT -1.0 //Valor default para arestas invalidas (inexistentes/sem peso)
 
-#define MAX_NODES = 1000; //Número máximo de nós permitidos
+#define MAX_NODES 1000 //Número máximo de nós permitidos
+
 
 node** nodelist; //Lista de nós que compõe o grafo
 
@@ -42,8 +43,11 @@ Função : initAdjMatrix
 Constrói uma matriz de Adjacência e inicializa todas as arestas sem peso (-1).
 A matriz de adjancência é uma matriz de floats simples de 2 dimensões e tamanho
 variável.
+Além disto inicializa a lista de nós chamando o método initNodeList.
 O parametro num_nodes define o tamanho da matriz de adjacências. Isto é, quantos
 nós o grafo em si possui.
+Caso o número de nós fornecido seja superior ao máximo permitido (MAX_NODES)
+então a função não cria a matriz e retorna NULL.
 A função retorna um ponteiro para a matriz de adjacência.
 */
 float** initAdjMatrix(unsigned num_nodes);
@@ -56,7 +60,7 @@ O parametro num_nodes define o número de nós do grafo.
 Retorna 0 caso tenha sido possível alocar memória suficiente para todos os nós.
 Caso tenha havido problemas de alocação de memória, retorna 1;
 */
-size_t initNodeList(unsigned num_nodes);
+size_t initNodeList();
 
 /*
 Função : addNode
@@ -83,25 +87,25 @@ A função retorna 0 caso a remoção ocorra com sucesso.
 size_t delNode(node _node);
 
 /*
-Função : getNode
+Função : getNodeById
 --------------------------
 Verifica se existe um nó no grafo através da comparação do campo id.
 Retorna NULL caso o nó não tenha sido encontrado.
 Caso o nó esteja presente na lista de nós, retorna a estrutura correspondente ao id informado.
 */
-node getNodeById(unsigned id);
+node* getNodeById(unsigned _id);
 
 /*
-Função : getNode
+Função : getNodeByName
 --------------------------
 Verifica se existe um nó no grafo através da comparação do campo nome.
 Retorna NULL caso o nó não tenha sido encontrado.
 Caso o nó esteja presente na lista de nós, retorna a estrutura correspondente ao nome informado.
 */
-node getNodeByName(char* name);
+node* getNodeByName(char* _name);
 
 /*
-Função : getNode
+Função : addEdge
 --------------------------
 Adiciona uma nova aresta à matriz de adjacências.
 Para que uma aresta seja adicionada as condições abaixo devem ser satisfeitas.
@@ -111,11 +115,20 @@ Para que uma aresta seja adicionada as condições abaixo devem ser satisfeitas.
     A aresta não pode ter sido adicionada anteriormente.
 Retorna 0 caso a aresta tenha sido adicionada
 Retorna 1 caso os dois nós da arestas sejam iguais
-Retorna 2 caso os nós não estejam defindosna lista de nós ou na matriz de adjacências.
+Retorna 2 caso os nós não estejam defindos na lista de nós ou na matriz de adjacências.
 Retorna 3 caso o peso da aresta seja invalido.
 Retorna 4 caso a aresta já esteja definida na matriz de adjacências. 
 */
 size_t addEdge(edge _edge, float** adjMatrix);
+
+/*
+Função : getNumEdges
+--------------------------
+Dado um nó e uma matriz de adjacências verifica todas as arestas cuja estrutura faz parte.
+Retorna o número de arestas cujo nó pertence.
+Caso o nó não esteja presente em nenhuma aresta, retorna 0.
+*/
+size_t getNumEdges(node _node, float** adjMatrix);
 
 /*
 Função : getEdge
@@ -124,7 +137,7 @@ Dado um nó e uma matriz de adjacências verifica todas as arestas cuja estrutur
 Retorna uma lista de arestas contendo todas as arestas cujo nó pertence.
 Caso o nó não esteja presente em nenhuma aresta, retorna NULL.
 */
-edge* getEdge(node _node, float** adjMatrix);
+edge* getEdges(node _node, float** adjMatrix);
 
 /*
 Função : printAdjMatrix
