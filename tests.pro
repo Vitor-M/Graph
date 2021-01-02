@@ -8,9 +8,11 @@ QMAKE_CXXFLAGS += -I$${includedir}
 QMAKE_CXXFLAGS += -x c -Wall -Wextra -pedantic
 
 SOURCES = $${srcdir}graph.c\
-          $${srcdir}main.c
+          $${srcdir}dijkstra.c\
+          $${srcdir}test.c
 
-HEADERS = $${includedir}graph.h 
+HEADERS = $${includedir}graph.h\
+          $${includedir}dijkstra.h\
 
 
 TARGET = $${bindir}grApph

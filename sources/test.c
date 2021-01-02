@@ -1,4 +1,5 @@
 #include "headers/graph.h"
+#include "headers/dijkstra.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,7 +10,7 @@ int main()
     scanf("%u", &graph_num_nodes);
 
     float **graph = initAdjMatrix(graph_num_nodes);
-    
+
     /* Nomeação dos nós */
     unsigned index = 0;
     node node_pattern; 
@@ -50,8 +51,45 @@ int main()
         system("clear");
     }
 
+
     printAdjMatrix(graph,true);
+
+    /* Caminho mais curto entre dois nós utilizando Dijkstra */
+
+    char opt;
+    initDijkstra(graph);
     
+    printf("\nBusca de Caminhos de Dijkstra: \n");
+    printf("\nDigite X para sair : ");
+    scanf(" %c", &opt);
+
+    while(opt != 'x' && opt != 'X')
+    {
+        /*
+            TODO: Verificar se os nós informados para aplicação de dijkstra são válidos (estão no grafo). 
+        */
+        node orig,dest;
+        printf("\nDigite o valor do indice do no de origem: ");
+        scanf("%u", &orig.id);
+        printf("\nDigite o valor do indice do no de destino: ");
+        scanf("%u", &dest.id);
+        
+        path_info* dijkstra_path = findPath(orig,dest);
+
+        if(dijkstra_path)
+        {
+            printf("\nCaminho de peso %.2f encontrado por dijkstra: ", dijkstra_path->weight);
+            printPath(dijkstra_path->_path, true);
+            free(dijkstra_path);
+        }
+
+        dijkstra_path = NULL;
+
+        printf("\nBusca de Caminhos de Dijkstra: \n");
+        printf("\nDigite X para sair : ");
+        scanf(" %c", &opt);
+    }
+
  
     //printf("%s -> %d",getNodeById(5)->name, getNumEdges(*getNodeById(5),graph));
     return 0;
